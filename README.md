@@ -1,3 +1,3 @@
 A lot of the mathey stuff out there is not tailored well to game programmers. This is my personal reference book for game math.
 
-## [[Vector|Vector]]
+## [Vector](./Vector.md)
