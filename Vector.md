@@ -1,4 +1,4 @@
-Note: All code examples give in C#
+# Vectors
 
 ## Vector Length
 
@@ -19,13 +19,13 @@ The dot product is commutative, meaning order does not matter.
 
 The common, simplified explanation of what the dot product does is that it "projects" one vector onto another:
 
-![](./dot_product.png)
+![](./img/dot_product.png)
 
 This projection does not have to hit the other vector, it just project onto that vector as an infinite line.
 
 The dot product will return a negative value if projected onto the other side of the origin like so:
 
-![](./dot_product2.png)
+![](./img/dot_product2.png)
 
 #### Dot product function
 ```csharp
@@ -56,15 +56,15 @@ Generally speaking, circular-space inputs allow scaling top-down movement withou
 
 The naive approach to moving from square to circular space is to normalize the vector. This, sadly, chops the vector short instead of properly scaling it. Moving the controller diagonally would reach it's max halfway out, then have a large live-zone in the corner. In other words, you get this:
 
-![](./square_vec_normalized.png)
+![](./img/square_vec_normalized.png)
 
 The proper way to map from square to circular space would eliminate these "maxed zones" in the corners:
 
-![](./square_vec_circularized.png)
+![](./img/square_vec_circularized.png)
 
 Similarly, reversing the mapping for a circular-space vector to square-space would look like this:
 
-![](./circ_vec_squarized.png)
+![](./img/circ_vec_squarized.png)
 
 
 For a bit more info on the math, this blog post does an decent job explaining: http://squircular.blogspot.com/2015/09/mapping-circle-to-square.html
