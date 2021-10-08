@@ -1,19 +1,21 @@
-# Vectors
+# Vector 2D
 
-## Vector Length
+## Length
 
 ```csharp
-public float Length( Vector2 v ) => Math.Sqrt( v.x*v.x + v.y*v.y );
+public float Length( Vector2 v )
+  => Math.Sqrt( v.x*v.x + v.y*v.y );
 ```
 
 The sqrt operation is a lot to compute, so sometimes a `LengthSquared` is better:
 
 ```csharp
-public float LengthSquared( Vector2 v ) => v.x*v.x + v.y*v.y;
+public float LengthSquared( Vector2 v )
+  => v.x*v.x + v.y*v.y;
 ```
 
 
-## Vector Dot Product
+## Dot Product
 
 The dot product is commutative, meaning order does not matter.
 
@@ -27,23 +29,22 @@ The dot product will return a negative value if projected onto the other side of
 
 ![](./img/dot_product2.png)
 
-#### Dot product function
+### Dot product function
 ```csharp
-// Vector2D version:
-var dotProduct2D = a.x*b.x + a.y*b.y;
-
-// Vector3D version:
-var dotProduct3D = a.x*b.x + a.y*b.y + a.z*b.z;
+public float Dot( this Vector2 a, Vector2 b )
+  => a.x*b.x + a.y*b.y;
 ```
 
-## Vector Projecttion
+
+## Projection
 
 The dot product returns a number (aka a scalar value,) _not_ a vector.
 To perform a projection and get back a vector, you can do so _using_ the dot product and the normal of the target vector. This operation is not commutative.
 
-#### Projection function
+### Project function
 ```csharp
-var projected = vecA.Dot( vecB ) * vecB.Normalized();
+public Vector2 Project( Vector2 a, Vector2 b )
+  => a.Dot( b ) * b.Normalized();
 ```
 
 
@@ -54,7 +55,7 @@ Video game controllers, depending on the engine, will report values back from a 
 It's good to be aware of which type of input you are dealing with, especially when using those values to scale movement based on the controller.
 Generally speaking, circular-space inputs allow scaling top-down movement without having your character move faster diagonally that up and down. Meanwhile, square-space inputs are better for scaling side-scroller characters, as moving the stick diagonally shouldn't cause the player to slow down horizontally.
 
-The naive approach to moving from square to circular space is to normalize the vector. This, sadly, chops the vector short instead of properly scaling it. Moving the controller diagonally would reach it's max halfway out, then have a large live-zone in the corner. In other words, you get this:
+The naïve approach to moving from square to circular space is to normalize the vector. This, sadly, chops the vector short instead of properly scaling it. Moving the controller diagonally would reach it's max halfway out, then have a large live-zone in the corner. In other words, you get this:
 
 ![](./img/square_vec_normalized.png)
 
@@ -72,29 +73,29 @@ For a bit more info on the math, this blog post does an decent job explaining: h
 Below is a sample implementation.
 
 ```csharp
-    public static readonly float __2root2 = 2f * Mathf.Sqrt( 2f );
+public static readonly float __2root2 = 2f * Mathf.Sqrt( 2f );
 
-    /// <summary> Map a circle grid to a square grid </summary>
-    /// <param name="circCoord"> A vector from a circular domain where r=1 </param>
-    /// <returns> A vector in a square domain where x=[-1,1] and y=[-1,1] </returns>
-    public static Vector2 CircleToSquareSpace( this Vector2 circCoord )
-    {
-      var xx = circCoord[0] * circCoord[0];
-      var yy = circCoord[1] * circCoord[1];
-      return new Vector2(
-        0.5f * (Mathf.Sqrt( 2f + xx - yy + circCoord[0] * __2root2 ) - Mathf.Sqrt( 2f + xx - yy - circCoord[0] * __2root2 )),
-        0.5f * (Mathf.Sqrt( 2f - xx + yy + circCoord[1] * __2root2 ) - Mathf.Sqrt( 2f - xx + yy - circCoord[1] * __2root2 ))
-      );
-    }
+/// <summary> Map a circle grid to a square grid </summary>
+/// <param name="circCoord"> A vector from a circular domain where r=1 </param>
+/// <returns> A vector in a square domain where x=[-1,1] and y=[-1,1] </returns>
+public static Vector2 CircleToSquareSpace( this Vector2 circCoord )
+{
+  var xx = circCoord[0] * circCoord[0];
+  var yy = circCoord[1] * circCoord[1];
+  return new Vector2(
+    0.5f * (Mathf.Sqrt( 2f + xx - yy + circCoord[0] * __2root2 ) - Mathf.Sqrt( 2f + xx - yy - circCoord[0] * __2root2 )),
+    0.5f * (Mathf.Sqrt( 2f - xx + yy + circCoord[1] * __2root2 ) - Mathf.Sqrt( 2f - xx + yy - circCoord[1] * __2root2 ))
+  );
+}
 
-    /// <summary> Map a square grid to a circular grid </summary>
-    /// <param name="coord"> A vector from a square domain where x=[-1,1] and y=[-1,1] </param>
-    /// <returns> A vector in a circular domain where r=1 </returns>
-    public static Vector2 SquareToCircleSpace( this Vector2 coord )
-    {
-      return new Vector2(
-        coord.x * Mathf.Sqrt( 1f - 0.5f * coord.y * coord.y ),
-        coord.y * Mathf.Sqrt( 1f - 0.5f * coord.x * coord.x )
-      );
-    }
+/// <summary> Map a square grid to a circular grid </summary>
+/// <param name="coord"> A vector from a square domain where x=[-1,1] and y=[-1,1] </param>
+/// <returns> A vector in a circular domain where r=1 </returns>
+public static Vector2 SquareToCircleSpace( this Vector2 coord )
+{
+  return new Vector2(
+    coord.x * Mathf.Sqrt( 1f - 0.5f * coord.y * coord.y ),
+    coord.y * Mathf.Sqrt( 1f - 0.5f * coord.x * coord.x )
+  );
+}
 ```
