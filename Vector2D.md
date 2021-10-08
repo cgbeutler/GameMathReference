@@ -3,15 +3,28 @@
 ## Length
 
 ```csharp
-public float Length( Vector2 v )
+public float Length( this Vector2 v )
   => Math.Sqrt( v.x*v.x + v.y*v.y );
 ```
 
 The sqrt operation is a lot to compute, so sometimes a `LengthSquared` is better:
 
 ```csharp
-public float LengthSquared( Vector2 v )
+public float LengthSquared( this Vector2 v )
   => v.x*v.x + v.y*v.y;
+```
+
+
+## Normalizing
+
+Unit vectors (of length 1) are super handy. Any time there is a '1' in math, that allow it to be squashed and stretched with multiplication, while maintaining properties relative to the '1'.
+
+Converting a vector into a Unit Vector is called Normalizing.
+
+### Normalized function
+```csharp
+public Vector2 Normalized( this Vector2 v )
+  => (v.x == 0 && v.y == 0) ? Vector2.Zero : v / v.Length();
 ```
 
 
@@ -43,7 +56,7 @@ To perform a projection and get back a vector, you can do so _using_ the dot pro
 
 ### Project function
 ```csharp
-public Vector2 Project( Vector2 a, Vector2 b )
+public Vector2 Project( this Vector2 a, Vector2 b )
   => a.Dot( b ) * b.Normalized();
 ```
 
