@@ -1,7 +1,7 @@
 Scalars
 =======
 
-Don't be scared by the name. This page is just for single-number stuffs (as opposed to vectors that have several quantity components.)
+Don't be scared by the name. This page is just for single-number stuffs (as opposed to vectors that have two or more numbers to deal with.)
 
 ## Sigmoid Functions
 
